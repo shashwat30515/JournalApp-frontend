@@ -30,3 +30,11 @@ npm run dev              # http://localhost:5173
 | Admin: create admin | POST | `/admin/create-admin-user` |
 
 The auth token is stored in `localStorage` under `journal_auth_token`.
+
+## Connecting to the backend (http://localhost:8080)
+
+Start your backend on port 8080, then `npm run dev`. The browser calls `/api/*` and Vite
+proxies it to `http://localhost:8080/*`, so no CORS setup is needed. Change the target with
+`VITE_PROXY_TARGET` in `.env`. All paths live in `src/config/endpoints.ts`.
+
+For a production build, set `VITE_API_BASE_URL` to the full backend URL and enable CORS there.

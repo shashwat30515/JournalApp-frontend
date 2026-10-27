@@ -1,6 +1,7 @@
 import axios from "axios";
 import { env } from "../config/env";
 import { toast } from "sonner";
+import { ENDPOINTS } from "../config/endpoints";
 
 export const TOKEN_KEY = "journal_auth_token";
 
@@ -29,7 +30,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     const status = error.response?.status;
     const message = error.response?.data?.message || error.message;
-    const isLoginCall = error.config?.url === "/login";
+    const isLoginCall = error.config?.url === ENDPOINTS.auth.login;
 
     if (!error.response) {
       toast.error("Network Error: Unable to connect to the backend server.");
