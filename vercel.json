@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://journalapp-z3m2.onrender.com" },
+    { "source": "/api/:path*", "destination": "https://journalapp-z3m2.onrender.com/journal*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
