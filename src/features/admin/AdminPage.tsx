@@ -109,7 +109,7 @@ export const AdminPage: React.FC = () => {
 
   return (
     <div className="space-y-10">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="text-2xl font-bold">Admin Panel</h2>
         <Link
           to="/admin/journal"
@@ -166,7 +166,7 @@ export const AdminPage: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-3">
-                        <div className="flex items-center justify-end gap-2">
+                        <div className="flex flex-wrap items-center justify-end gap-2">
                           {!isAlreadyAdmin ? (
                             <button
                               onClick={() => {

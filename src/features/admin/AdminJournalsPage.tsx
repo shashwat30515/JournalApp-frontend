@@ -43,14 +43,15 @@ export const AdminJournalsPage: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6 gap-4">
-        <h2 className="text-2xl font-bold">All Journal Entries</h2>
-        <input
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="Search by user, title or content"
-          className="w-72 px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
-        />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
+  <h2 className="text-2xl font-bold">All Journal Entries</h2>
+  <input
+    value={filter}
+    onChange={(e) => setFilter(e.target.value)}
+    placeholder="Search by user, title, content or mood"
+    className="w-full sm:w-80 px-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+  />
+
       </div>
 
       {entries.length === 0 ? (

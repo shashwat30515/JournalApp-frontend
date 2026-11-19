@@ -31,7 +31,7 @@ export const JournalListPage: React.FC = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <h2 className="text-2xl font-bold">Journal Entries</h2>
         <Link
           to="/journal/new"
