@@ -4,6 +4,7 @@ import { AppLayout } from "../components/layout/AppLayout";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { LoginPage } from "../features/auth/LoginPage";
 import { RegisterPage } from "../features/auth/RegisterPage";
+import { OAuthCallbackPage } from "../features/auth/OAuthCallbackPage";
 import { DashboardPage } from "../features/dashboard/DashboardPage";
 import { JournalListPage } from "../features/journal/JournalListPage";
 import { JournalDetailPage } from "../features/journal/JournalDetailPage";
@@ -11,15 +12,19 @@ import { JournalCreatePage } from "../features/journal/JournalCreatePage";
 import { JournalEditPage } from "../features/journal/JournalEditPage";
 import { ProfilePage } from "../features/profile/ProfilePage";
 import { AdminPage } from "../features/admin/AdminPage";
+import { AdminJournalsPage } from "../features/admin/AdminJournalsPage";
 import { NotFoundPage } from "../features/errors/NotFoundPage";
 import { ForbiddenPage } from "../features/errors/ForbiddenPage";
 
 export const AppRouter: React.FC = () => (
   <BrowserRouter>
     <Routes>
+      {/* public routes */}
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/oauth2/callback" element={<OAuthCallbackPage />} />
 
+      {/* protected routes */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
@@ -28,11 +33,9 @@ export const AppRouter: React.FC = () => (
           <Route path="/journal/edit/:id" element={<JournalEditPage />} />
           <Route path="/journal/:id" element={<JournalDetailPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/journal" element={<AdminJournalsPage />} />
           <Route path="/forbidden" element={<ForbiddenPage />} />
-
-          <Route element={<ProtectedRoute requireAdmin />}>
-            <Route path="/admin" element={<AdminPage />} />
-          </Route>
         </Route>
       </Route>
 

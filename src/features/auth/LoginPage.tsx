@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useNavigate, Link } from "react-router-dom";
 import { authApi } from "../../api/authApi";
-import { TOKEN_KEY } from "../../api/axiosInstance";
+
 import { toast } from "sonner";
 import { BookOpen, Eye, EyeOff } from "lucide-react";
+import { startGoogleLogin } from "../../utils/googleAuth";
+import { setToken, setLoginMethod } from "../../api/axiosInstance";
 
 const loginSchema = z.object({
   username: z.string().min(1, "Username is required"),
@@ -20,6 +22,15 @@ export const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  // shows why you were logged out (expired session, etc.)
+  useEffect(() => {
+    const reason = sessionStorage.getItem("logout_reason");
+    if (reason) {
+      toast.error(reason);
+      sessionStorage.removeItem("logout_reason");
+    }
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -29,14 +40,13 @@ export const LoginPage: React.FC = () => {
   const onSubmit = async (values: LoginFormData) => {
     setIsLoading(true);
     try {
-      const result = await authApi.login(values);
-      if (result.token) {
-        localStorage.setItem(TOKEN_KEY, result.token);
-      }
+      const { token } = await authApi.login(values);
+      setToken(token);
       toast.success("Welcome back!");
       navigate("/dashboard");
-    } catch {
-      // error toast handled by axios interceptor
+    } catch (e: any) {
+      // HTTP and network errors already show a toast in the interceptor
+      if (!e?.response && !e?.request) toast.error(e?.message || "Login failed");
     } finally {
       setIsLoading(false);
     }
@@ -89,6 +99,13 @@ export const LoginPage: React.FC = () => {
           >
             {isLoading ? "Signing in..." : "Sign in"}
           </button>
+          <button
+        type="button"
+  onClick={startGoogleLogin}
+  className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+>
+  Continue with Google
+</button>
         </form>
 
         <p className="text-sm text-gray-600 text-center mt-6">

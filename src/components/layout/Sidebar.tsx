@@ -1,20 +1,31 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { LayoutDashboard, BookOpen, User, Shield, LogOut } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { TOKEN_KEY } from "../../api/axiosInstance";
+import { userApi } from "../../api/userApi";
 
 interface SidebarProps {
-  userRole?: "USER" | "ADMIN";
+  userRole?: any;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  // Same query key as AppLayout, so this shares the cached result (no extra request)
+  const { data: user } = useQuery({
+    queryKey: ["userProfile"],
+    queryFn: userApi.getProfile,
+  });
+
+  const role = user?.role ?? userRole;
+  const isAdmin = String(role ?? "").toUpperCase().includes("ADMIN");
+
+  console.log("Sidebar role:", role, "isAdmin:", isAdmin);
+
   const handleLogout = () => {
-    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem("journal_auth_token");
     queryClient.clear();
     toast.success("Logged out successfully");
     navigate("/login");
@@ -24,7 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
     { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
     { label: "Journal Entries", to: "/journal", icon: BookOpen },
     { label: "Profile", to: "/profile", icon: User },
-    ...(userRole === "ADMIN" ? [{ label: "Admin Panel", to: "/admin", icon: Shield }] : []),
+    ...(isAdmin ? [{ label: "Admin Panel", to: "/admin", icon: Shield }] : []),
   ];
 
   return (
@@ -43,7 +54,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ userRole }) => {
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.to === "/journal"}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                   isActive
