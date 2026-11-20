@@ -7,6 +7,7 @@ export const ENDPOINTS = {
   },
   user: {
     me: "/user",
+    greeting: "/user/greeting", 
   },
   journal: {
     base: "/journal",

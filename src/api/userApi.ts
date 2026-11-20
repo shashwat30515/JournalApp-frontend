@@ -15,6 +15,7 @@ const roleLooksLikeAdmin = (raw: any): boolean => {
   return values.some((v) => typeof v === "string" && v.toUpperCase().includes("ADMIN"));
 };
 
+
 // Reads the flag whatever the backend calls it
 const readFlag = (obj: any): boolean | undefined => {
   const v = obj?.sentimentAnalysis ?? obj?.sentimentanalysis ?? obj?.sentiment_analysis;
@@ -96,5 +97,17 @@ export const userApi = {
   adminGetAllJournals: async (): Promise<any[]> => {
     const response = await axiosInstance.get(ENDPOINTS.admin.allJournals);
     return response.data ?? [];
+  },
+  // validateStatus makes 4xx/5xx resolve normally, so a weather failure
+  // shows no error toast and never logs the user out
+  getGreeting: async (): Promise<{ ok: boolean; status: number; text: string }> => {
+    const res = await axiosInstance.get(ENDPOINTS.user.greeting, {
+      validateStatus: () => true,
+    });
+    return {
+      ok: res.status >= 200 && res.status < 300,
+      status: res.status,
+      text: typeof res.data === "string" ? res.data : JSON.stringify(res.data ?? ""),
+    };
   },
 };

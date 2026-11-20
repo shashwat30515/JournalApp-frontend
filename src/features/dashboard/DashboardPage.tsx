@@ -5,9 +5,10 @@ import { PlusCircle } from "lucide-react";
 import { journalApi } from "../../api/journalApi";
 import { userApi } from "../../api/userApi";
 import { Spinner } from "../../components/common/Spinner";
+import { WeatherCard } from "../../components/dashboard/WeatherCard";
 
 export const DashboardPage: React.FC = () => {
-  const { data: profile } = useQuery({ queryKey: ["profile"], queryFn: userApi.getProfile });
+  const { data: profile } = useQuery({ queryKey: ["userProfile"], queryFn: userApi.getProfile });
   const { data: entries, isLoading } = useQuery({
     queryKey: ["journal"],
     queryFn: journalApi.getAll,
@@ -33,11 +34,13 @@ export const DashboardPage: React.FC = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white border border-gray-200 rounded-xl p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="bg-white border border-gray-200 rounded-xl p-6 min-h-[104px]">
           <p className="text-sm text-gray-500">Total entries</p>
           <p className="text-3xl font-bold mt-1">{list.length}</p>
         </div>
+
+        <WeatherCard />
       </div>
 
       <div>
